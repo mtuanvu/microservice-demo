@@ -1,0 +1,34 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: friend-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/friend-service
+    username: postgres
+    password: mtuanvu1234
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  kafka:
+    bootstrap-servers: kafka-1:9092,kafka-2:9093,kafka-3:9094
+    consumer:
+      group-id: friend-service-group
+      auto-offset-reset: earliest
+    producer:
+      retries: 3
+    properties:
+      spring.json.trusted.packages: "*"
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
