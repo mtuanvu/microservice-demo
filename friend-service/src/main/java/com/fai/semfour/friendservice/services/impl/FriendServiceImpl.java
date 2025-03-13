@@ -25,20 +25,18 @@ public class FriendServiceImpl implements FriendService {
             throw new IllegalArgumentException("Cannot add yourself as a friend.");
         }
 
-        // Kiểm tra xem đã là bạn bè chưa
         Optional<Friend> existingFriendship = friendRepository.findByUserIdAndFriendId(userId, friendId);
         if (existingFriendship.isPresent()) {
-            log.warn("⚠️ Friendship already exists between userId={} and friendId={}", userId, friendId);
+            log.warn("Friendship already exists between userId={} and friendId={}", userId, friendId);
             return;
         }
 
-        // Thêm bạn bè theo cả hai chiều (A -> B và B -> A)
         Friend friend1 = new Friend(userId, friendId);
         Friend friend2 = new Friend(friendId, userId);
         friendRepository.save(friend1);
         friendRepository.save(friend2);
 
-        log.info("✅ Friendship created: userId={} friendId={}", userId, friendId);
+        log.info("Friendship created: userId={} friendId={}", userId, friendId);
     }
 
     @Override
@@ -50,7 +48,6 @@ public class FriendServiceImpl implements FriendService {
             return;
         }
 
-        // Xóa quan hệ bạn bè theo cả hai chiều (A -> B và B -> A)
         friendRepository.deleteByUserIdAndFriendId(userId, friendId);
         friendRepository.deleteByUserIdAndFriendId(friendId, userId);
 

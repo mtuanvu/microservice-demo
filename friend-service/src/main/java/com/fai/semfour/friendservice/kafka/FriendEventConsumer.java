@@ -16,17 +16,16 @@ public class FriendEventConsumer {
 
     @KafkaListener(topics = "friend-events", groupId = "friend-group")
     public void consume(FriendEvent event) {
-        log.info("📥 Received FriendEvent from Kafka: {}", event);
+        log.info("Received FriendEvent from Kafka: {}", event);
 
-        // Xử lý logic: Thêm hoặc xóa bạn bè dựa vào eventType
         if ("ADD".equalsIgnoreCase(event.getEventType())) {
-            log.info("✅ Adding friend: userId={} friendId={}", event.getUserId(), event.getFriendId());
+            log.info("Adding friend: userId={} friendId={}", event.getUserId(), event.getFriendId());
             friendService.addFriend(event.getUserId(), event.getFriendId());
         } else if ("REMOVE".equalsIgnoreCase(event.getEventType())) {
-            log.info("❌ Removing friend: userId={} friendId={}", event.getUserId(), event.getFriendId());
+            log.info("Removing friend: userId={} friendId={}", event.getUserId(), event.getFriendId());
             friendService.removeFriend(event.getUserId(), event.getFriendId());
         } else {
-            log.warn("⚠️ Unknown eventType: {}", event.getEventType());
+            log.warn("Unknown eventType: {}", event.getEventType());
         }
     }
 }
