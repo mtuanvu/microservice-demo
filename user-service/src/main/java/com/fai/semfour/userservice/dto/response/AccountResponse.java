@@ -3,8 +3,9 @@ package com.fai.semfour.userservice.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -14,8 +15,16 @@ import java.time.LocalDateTime;
 public class AccountResponse {
     String id;
     String username;
-    Timestamp deletedAt;
-    boolean systemBlock;
+    String firstName;
+    String lastName;
+    LocalDate birthDate;
+    String email;
+    String phone;
+    String avatarUrl;
+    String backgroundUrl;
+    String bio;
+    String gender;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
+    List<RoleResponse> roles;
 }

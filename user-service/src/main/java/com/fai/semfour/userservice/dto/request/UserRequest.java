@@ -23,5 +23,4 @@ public class UserRequest {
     String backgroundUrl;
     String bio;
     Gender gender;
-    String accountId;
 }

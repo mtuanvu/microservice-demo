@@ -5,9 +5,7 @@ import com.fai.semfour.userservice.dto.response.UserResponse;
 import com.fai.semfour.userservice.utils.paging.PagingResponse;
 
 public interface UserService {
-    UserResponse createUser(UserRequest request);
     UserResponse updateUser(String id, UserRequest request);
     UserResponse getUser(String id);
     PagingResponse<UserResponse> getAllUsers(int pageNumber, int pageSize);
-    void deleteUser(String id);
 }

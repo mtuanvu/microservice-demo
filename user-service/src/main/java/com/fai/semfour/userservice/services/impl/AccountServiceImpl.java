@@ -3,10 +3,14 @@ package com.fai.semfour.userservice.services.impl;
 import com.fai.semfour.userservice.dto.request.AccountRequest;
 import com.fai.semfour.userservice.dto.response.AccountResponse;
 import com.fai.semfour.userservice.entities.Account;
+import com.fai.semfour.userservice.entities.User;
 import com.fai.semfour.userservice.exception.AppException;
 import com.fai.semfour.userservice.exception.ErrorCode;
 import com.fai.semfour.userservice.mapper.AccountMapper;
+import com.fai.semfour.userservice.mapper.UserMapper;
 import com.fai.semfour.userservice.repositories.AccountRepository;
+import com.fai.semfour.userservice.repositories.RoleRepository;
+import com.fai.semfour.userservice.repositories.UserRepository;
 import com.fai.semfour.userservice.services.AccountService;
 import com.fai.semfour.userservice.utils.paging.PageableData;
 import com.fai.semfour.userservice.utils.paging.PagingResponse;
@@ -16,7 +20,9 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,11 +32,27 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService {
     AccountRepository accountRepository;
     AccountMapper accountMapper;
+    PasswordEncoder passwordEncoder;
+    UserRepository userRepository;
+    UserMapper userMapper;
 
     @Override
-    public AccountResponse createAccount(AccountRequest request) {
+    @Transactional
+    public AccountResponse registerAccount(AccountRequest request) {
+        if (accountRepository.existsByUsername(request.getUsername()) || userRepository.existsByEmail(request.getEmail())) {
+            throw new AppException(ErrorCode.USERNAME_EMAIL_ALREADY_EXISTS);
+        }
+
         Account account = accountMapper.toAccount(request);
-        return accountMapper.toAccountResponse(accountRepository.save(account));
+        account.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        User user = userMapper.toUser(request, new User());
+        user.setAccount(account);
+
+        account.setUser(user);
+        accountRepository.save(account);
+
+        return accountMapper.toAccountResponse(account);
     }
 
     @Override

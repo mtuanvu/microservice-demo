@@ -19,6 +19,7 @@ public enum ErrorCode {
     UNAUTHORIZED(2001, "Unauthorized", HttpStatus.UNAUTHORIZED),
     FORBIDDEN(2002, "Access denied", HttpStatus.FORBIDDEN),
     INVALID_PERMISSION_IDS(1009, "Permission does not exist", BAD_REQUEST),
+    USERNAME_EMAIL_ALREADY_EXISTS(1010, "Username or email already exists", BAD_REQUEST),
 
 
     USER_NOT_FOUND(3001, "User not found", NOT_FOUND),

@@ -1,15 +1,11 @@
 package com.fai.semfour.userservice.services.impl;
 
-import com.fai.semfour.userservice.dto.FriendEvent;
 import com.fai.semfour.userservice.dto.request.UserRequest;
 import com.fai.semfour.userservice.dto.response.UserResponse;
-import com.fai.semfour.userservice.entities.Account;
 import com.fai.semfour.userservice.entities.User;
 import com.fai.semfour.userservice.exception.AppException;
 import com.fai.semfour.userservice.exception.ErrorCode;
-import com.fai.semfour.userservice.kafka.FriendEventProducer;
 import com.fai.semfour.userservice.mapper.UserMapper;
-import com.fai.semfour.userservice.repositories.AccountRepository;
 import com.fai.semfour.userservice.repositories.UserRepository;
 import com.fai.semfour.userservice.services.UserService;
 import com.fai.semfour.userservice.utils.paging.PageableData;
@@ -30,22 +26,6 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     UserMapper userMapper;
-    AccountRepository accountRepository;
-
-    @Override
-    public UserResponse createUser(UserRequest request) {
-        if (request.getAccountId() == null || request.getAccountId().isEmpty()) {
-            throw new IllegalArgumentException("Account ID không được để trống");
-        }
-
-        Account account = accountRepository.findById(request.getAccountId())
-                .orElseThrow(() -> new RuntimeException("Account không tồn tại"));
-
-        User user = userMapper.toUser(request);
-        user.setAccount(account);
-
-        return userMapper.toUserResponse(userRepository.save(user));
-    }
 
     @Override
     public UserResponse updateUser(String id, UserRequest request) {
@@ -83,14 +63,5 @@ public class UserServiceImpl implements UserService {
         return new PagingResponse<UserResponse>()
                 .setContents(userResponses)
                 .setPaging(pageableData);
-    }
-
-    @Override
-    public void deleteUser(String id) {
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_FOUND)
-        );
-
-        userRepository.delete(user);
     }
 }

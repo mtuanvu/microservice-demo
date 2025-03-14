@@ -8,7 +8,6 @@ import com.fai.semfour.userservice.utils.paging.PagingResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,14 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
     UserService userService;
-
-    @PostMapping
-    public ApiResponse<UserResponse> createUser(@RequestBody UserRequest request) {
-        return ApiResponse.<UserResponse>builder()
-                .code(200)
-                .data(userService.createUser(request))
-                .build();
-    }
 
     @GetMapping
     public ApiResponse<PagingResponse<UserResponse>> getAllUsers(
@@ -50,17 +41,5 @@ public class UserController {
                 .code(200)
                 .data(userService.getUser(id))
                 .build();
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<String>> deleteUser(@PathVariable String id) {
-        userService.deleteUser(id);
-
-        ApiResponse<String> apiResponse = ApiResponse.<String>builder()
-                .code(200)
-                .error("Deleted!")
-                .build();
-
-        return ResponseEntity.ok(apiResponse);
     }
 }

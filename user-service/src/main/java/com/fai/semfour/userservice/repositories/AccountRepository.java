@@ -17,4 +17,7 @@ public interface AccountRepository extends JpaRepository<Account, String> {
 
     @Query("SELECT a FROM Account a")
     Page<Account> findAllAccount(Pageable pageable);
+
+    @Query("SELECT COUNT(a) > 0 FROM Account a WHERE a.username = :username")
+    boolean existsByUsername(@Param("username") String username);
 }
