@@ -14,9 +14,12 @@ public enum ErrorCode {
 
     INVALID_INPUT(1001, "Invalid input data", BAD_REQUEST),
     MISSING_REQUIRED_FIELD(1002, "Missing required field", BAD_REQUEST),
+    ROLE_ALREADY_EXISTS(1007, "Role already exists", BAD_REQUEST),
 
     UNAUTHORIZED(2001, "Unauthorized", HttpStatus.UNAUTHORIZED),
     FORBIDDEN(2002, "Access denied", HttpStatus.FORBIDDEN),
+    INVALID_PERMISSION_IDS(1009, "Permission does not exist", BAD_REQUEST),
+
 
     USER_NOT_FOUND(3001, "User not found", NOT_FOUND),
     PERMISSION_NOT_FOUND(3002, "Permission not found", NOT_FOUND),

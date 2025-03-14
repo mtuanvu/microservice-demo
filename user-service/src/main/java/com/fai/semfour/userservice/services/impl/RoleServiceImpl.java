@@ -2,10 +2,12 @@ package com.fai.semfour.userservice.services.impl;
 
 import com.fai.semfour.userservice.dto.request.RoleRequest;
 import com.fai.semfour.userservice.dto.response.RoleResponse;
+import com.fai.semfour.userservice.entities.Permission;
 import com.fai.semfour.userservice.entities.Role;
 import com.fai.semfour.userservice.exception.AppException;
 import com.fai.semfour.userservice.exception.ErrorCode;
 import com.fai.semfour.userservice.mapper.RoleMapper;
+import com.fai.semfour.userservice.repositories.PermissionRepository;
 import com.fai.semfour.userservice.repositories.RoleRepository;
 import com.fai.semfour.userservice.services.RoleService;
 import com.fai.semfour.userservice.utils.paging.PageableData;
@@ -18,7 +20,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -26,10 +30,22 @@ import java.util.List;
 public class RoleServiceImpl implements RoleService {
     RoleRepository roleRepository;
     RoleMapper roleMapper;
+    PermissionRepository permissionRepository;
 
     @Override
     public RoleResponse createRole(RoleRequest request) {
+        Set<Long> ids = request.getPermissions();
+        List<Permission> permissions = permissionRepository.findAllByIdPermissions(ids);
+
+        boolean exists = roleRepository.existsByNameAndPermissions(request.getName(), ids);
+        if (exists) {
+            throw new AppException(ErrorCode.ROLE_ALREADY_EXISTS);
+        }
+
+
         Role role = roleMapper.toRole(request);
+        role.setPermissions(new HashSet<>(permissions));
+
         return roleMapper.toRoleResponse(roleRepository.save(role));
     }
 
@@ -39,6 +55,15 @@ public class RoleServiceImpl implements RoleService {
                 () -> new AppException(ErrorCode.ROLE_NOT_FOUND));
 
         roleMapper.updateRole(role, request);
+
+        Set<Long> ids =request.getPermissions();
+        List<Permission> permissions = permissionRepository.findAllByIdPermissions(ids);
+
+        if (permissions.size() != ids.size()) {
+            throw new AppException(ErrorCode.INVALID_PERMISSION_IDS);
+        }
+
+        role.setPermissions(new HashSet<>(permissions));
 
         return roleMapper.toRoleResponse(roleRepository.save(role));
     }
