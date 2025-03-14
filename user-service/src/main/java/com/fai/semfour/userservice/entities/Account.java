@@ -45,5 +45,8 @@ public class Account extends DateTime {
     private User user;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AccessKey> accessKeys;
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<VerificationCode> verificationCodes;
 }

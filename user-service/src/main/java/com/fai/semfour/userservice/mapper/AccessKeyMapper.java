@@ -1,19 +1,25 @@
 package com.fai.semfour.userservice.mapper;
 
-import com.fai.semfour.userservice.dto.request.AccessKeyRequest;
+import com.fai.semfour.userservice.dto.request.AuthenticationRequest;
 import com.fai.semfour.userservice.dto.response.AccessKeyResponse;
 import com.fai.semfour.userservice.entities.AccessKey;
-import org.mapstruct.BeanMapping;
+import com.fai.semfour.userservice.entities.Account;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Mapper(componentModel = "spring", imports = {UUID.class, LocalDateTime.class})
 public interface AccessKeyMapper {
-    AccessKey toAccessKey(AccessKeyRequest request);
+    @Mapping(source = "accessToken", target = "accessToken")
+    @Mapping(source = "refreshToken", target = "refreshToken")
+    @Mapping(source = "deviceId", target = "deviceId")
+    @Mapping(source = "deviceType", target = "deviceType")
+    @Mapping(source = "isActive", target = "isActive")
+    AccessKeyResponse toResponse(AccessKey accessKey);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateAccessKey(@MappingTarget AccessKey accessKey, AccessKeyRequest request);
-
-    AccessKeyResponse toAccessKeyResponse(AccessKey accessKey);
+    @Mapping(target = "isActive", expression = "java(Boolean.TRUE)")
+    @Mapping(target = "account", ignore = true)
+    AccessKey toAccessKey(AuthenticationRequest request, String accessToken, String refreshToken);
 }

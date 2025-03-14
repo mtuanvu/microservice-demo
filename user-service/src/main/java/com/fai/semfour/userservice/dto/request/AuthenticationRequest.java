@@ -1,18 +1,17 @@
-package com.fai.semfour.userservice.dto.response;
+package com.fai.semfour.userservice.dto.request;
 
 import com.fai.semfour.userservice.entities.AccessKey.DeviceType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class AccessKeyResponse {
-    String accessToken;
-    String refreshToken;
+public class AuthenticationRequest {
+    String username;
+    String password;
     String deviceId;
     DeviceType deviceType;
-    Boolean isActive;
 }

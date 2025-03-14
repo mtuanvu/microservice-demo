@@ -14,16 +14,17 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "access_keys")
+@Builder
 public class AccessKey extends DateTime {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "access_key_id")
     String id;
 
-    @Column(name = "access_token", nullable = false, unique = true)
+    @Column(name = "access_token", nullable = false, unique = true, length = 300)
     String accessToken;
 
-    @Column(name = "refresh_token")
+    @Column(name = "refresh_token", length = 300)
     String refreshToken;
 
     @Column(name = "device_id", nullable = false)
@@ -33,15 +34,15 @@ public class AccessKey extends DateTime {
     @Column(name = "device_type", nullable = false)
     DeviceType deviceType;
 
-    @Column(name = "last_used", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    LocalDateTime lastUsed;
+    @Column(name = "last_used")
+    LocalDateTime lastUsed = LocalDateTime.now();
 
-    @Column(name = "is_active", nullable = false)
+    @Column(name = "is_active")
     Boolean isActive;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id", nullable = false)
+    Account account;
 
     public enum DeviceType {
         WEB, MOBILE

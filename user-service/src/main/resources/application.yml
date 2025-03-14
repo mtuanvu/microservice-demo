@@ -13,11 +13,15 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
   properties:
     hibernate:
       format_sql: true
+      use_sql_comments: true  # Bật chú thích SQL
+      highlight_sql: true
+      jdbc:
+        batch_size: 1
 
   kafka:
     bootstrap-servers: localhost:9092
@@ -31,6 +35,7 @@ logging:
     root: INFO
     org.springframework.web: DEBUG
     org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE  # Hiển thị giá trị tham số SQL
     org.springframework.boot: ERROR
 
 eureka:
@@ -40,6 +45,10 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka/
 
+jwt:
+  signerKey: "5jNfSN9nejl7bpKNcfO2J3PB6QBrtg22FuG8DUiHzUxxRta8azatGtPdP8rWTapJ"
+  access-token-valid-duration: 3600000
+  refresh-token-valid-duration: 604800000
 
 springdoc:
   api-docs:

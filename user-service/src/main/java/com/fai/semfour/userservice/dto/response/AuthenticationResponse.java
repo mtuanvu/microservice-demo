@@ -4,15 +4,16 @@ import com.fai.semfour.userservice.entities.AccessKey.DeviceType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class AccessKeyResponse {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class AuthenticationResponse {
     String accessToken;
     String refreshToken;
     String deviceId;
     DeviceType deviceType;
-    Boolean isActive;
+    boolean authenticated;
 }
