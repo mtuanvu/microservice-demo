@@ -20,7 +20,7 @@ public enum ErrorCode {
     UNAUTHORIZED(2001, "Unauthorized", HttpStatus.UNAUTHORIZED),
     FORBIDDEN(2002, "Access denied", HttpStatus.FORBIDDEN),
     INVALID_PERMISSION_IDS(1009, "Permission does not exist", BAD_REQUEST),
-    USERNAME_EMAIL_ALREADY_EXISTS(1010, "Username or email already exists", BAD_REQUEST),
+    EMAIL_ALREADY_EXISTS(1010, "Email already exists", BAD_REQUEST),
     INVALID_PASSWORD(1011, "Invalid credentials", BAD_REQUEST),
     INVALID_REFRESH_TOKEN(1012, "Invalid refresh token", BAD_REQUEST),
     TOKEN_EXPIRED(1013, "Token expired", BAD_REQUEST),
@@ -32,7 +32,7 @@ public enum ErrorCode {
     ROLE_NOT_FOUND(3005, "Role not found", NOT_FOUND),
     VERIFICATION_CODE_NOT_FOUND(3006, "Verification code not found", NOT_FOUND),
     ACCOUNT_BLOCKED(3002, "Account is blocked", HttpStatus.FORBIDDEN),
-    USERNAME_NOT_FOUND(3006, "Username not found", NOT_FOUND),
+    EMAIL_NOT_FOUND(3006, "Email not found", NOT_FOUND),
 
     INVALID_ACCESS_TOKEN(4001, "Invalid access token", HttpStatus.UNAUTHORIZED),
     EXPIRED_ACCESS_TOKEN(4002, "Expired access token", HttpStatus.UNAUTHORIZED),

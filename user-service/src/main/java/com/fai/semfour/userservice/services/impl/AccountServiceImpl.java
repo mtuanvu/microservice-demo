@@ -9,7 +9,6 @@ import com.fai.semfour.userservice.exception.ErrorCode;
 import com.fai.semfour.userservice.mapper.AccountMapper;
 import com.fai.semfour.userservice.mapper.UserMapper;
 import com.fai.semfour.userservice.repositories.AccountRepository;
-import com.fai.semfour.userservice.repositories.RoleRepository;
 import com.fai.semfour.userservice.repositories.UserRepository;
 import com.fai.semfour.userservice.services.AccountService;
 import com.fai.semfour.userservice.utils.paging.PageableData;
@@ -33,18 +32,19 @@ public class AccountServiceImpl implements AccountService {
     AccountRepository accountRepository;
     AccountMapper accountMapper;
     PasswordEncoder passwordEncoder;
-    UserRepository userRepository;
     UserMapper userMapper;
 
     @Override
     @Transactional
     public AccountResponse registerAccount(AccountRequest request) {
-        if (accountRepository.existsByUsername(request.getUsername()) || userRepository.existsByEmail(request.getEmail())) {
-            throw new AppException(ErrorCode.USERNAME_EMAIL_ALREADY_EXISTS);
+        if (accountRepository.existsByEmail(request.getEmail())) {
+            throw new AppException(ErrorCode.EMAIL_ALREADY_EXISTS);
         }
 
         Account account = accountMapper.toAccount(request);
         account.setPassword(passwordEncoder.encode(request.getPassword()));
+
+
 
         User user = userMapper.toUser(request, new User());
         user.setAccount(account);

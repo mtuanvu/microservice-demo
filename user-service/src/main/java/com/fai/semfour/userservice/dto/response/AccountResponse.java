@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 public class AccountResponse {
     String id;
-    String username;
+    String email;
     List<RoleResponse> roles;
     UserResponse user;
 }

@@ -58,8 +58,8 @@ public class AuthenticationService {
 
     @Transactional
     public AccessKeyResponse authenticate(AuthenticationRequest request) {
-        Account account = accountRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND));
+        Account account = accountRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_FOUND));
 
         if (!passwordEncoder.matches(request.getPassword(), account.getPassword())) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
@@ -145,7 +145,7 @@ public class AuthenticationService {
     private String generateToken(Account account, long duration) {
         try {
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                    .subject(account.getUsername())
+                    .subject(account.getEmail())
                     .issuer("semfour.com")
                     .issueTime(new Date())
                     .expirationTime(Date.from(Instant.now().plus(duration, ChronoUnit.SECONDS)))
@@ -164,7 +164,7 @@ public class AuthenticationService {
     private String generateRefreshToken(Account account, long duration) {
         try {
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                    .subject(account.getUsername())
+                    .subject(account.getEmail())
                     .issueTime(new Date())
                     .expirationTime(Date.from(Instant.now().plus(duration, ChronoUnit.SECONDS)))
                     .build();

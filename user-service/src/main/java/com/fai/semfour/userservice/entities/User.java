@@ -2,7 +2,6 @@ package com.fai.semfour.userservice.entities;
 
 import com.fai.semfour.userservice.utils.DateTime;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -29,10 +28,6 @@ public class User extends DateTime {
 
     @Column(name = "birth_date", nullable = false)
     LocalDate birthDate;
-
-    @Email
-    @Column(name = "email", nullable = false, length = 100, unique = true)
-    String email;
 
     @Column(name = "phone", nullable = false, length = 11, unique = true)
     String phone;
