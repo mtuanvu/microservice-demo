@@ -2,6 +2,7 @@ package com.fai.semfour.userservice.controllers;
 
 import com.fai.semfour.userservice.dto.request.*;
 import com.fai.semfour.userservice.dto.response.AccessKeyResponse;
+import com.fai.semfour.userservice.dto.response.IntrospectResponse;
 import com.fai.semfour.userservice.dto.response.RefreshTokenResponse;
 import com.fai.semfour.userservice.services.impl.AuthenticationService;
 import com.fai.semfour.userservice.utils.ApiResponse;
@@ -38,5 +39,13 @@ public class AuthenticationController {
     public ResponseEntity<Void> logout(@RequestBody LogoutRequest request) {
         authenticationService.logout(request);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/introspect")
+    public ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) throws ParseException, JOSEException {
+        return ApiResponse.<IntrospectResponse>builder()
+                .code(200)
+                .data(authenticationService.introspect(request))
+                .build();
     }
 }

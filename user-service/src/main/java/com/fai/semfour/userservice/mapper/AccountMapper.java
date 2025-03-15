@@ -3,10 +3,7 @@ package com.fai.semfour.userservice.mapper;
 import com.fai.semfour.userservice.dto.request.AccountRequest;
 import com.fai.semfour.userservice.dto.response.AccountResponse;
 import com.fai.semfour.userservice.entities.Account;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
@@ -15,5 +12,6 @@ public interface AccountMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateAccount(@MappingTarget Account account, AccountRequest request);
 
+    @Mapping(source = "user", target = "user")
     AccountResponse toAccountResponse(Account account);
 }

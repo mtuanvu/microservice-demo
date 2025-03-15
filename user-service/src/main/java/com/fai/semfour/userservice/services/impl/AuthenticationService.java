@@ -49,6 +49,10 @@ public class AuthenticationService {
     protected long ACCESS_VALID_DURATION;
 
     @NonFinal
+    @Value("${jwt.signerKey-refresh-token}")
+    protected String SIGNER_KEY_REFRESH_TOKEN;
+
+    @NonFinal
     @Value("${jwt.refresh-token-valid-duration}")
     protected long REFRESH_VALID_DURATION;
 
@@ -105,7 +109,7 @@ public class AuthenticationService {
         accessKeyRepository.delete(accessKey);
 
         String newAccessToken = generateToken(account, ACCESS_VALID_DURATION);
-        String newRefreshToken = generateToken(account, REFRESH_VALID_DURATION);
+        String newRefreshToken = generateRefreshToken(account, REFRESH_VALID_DURATION);
 
         AccessKey newAccessKey = AccessKey.builder()
                 .id(UUID.randomUUID().toString())
@@ -150,6 +154,23 @@ public class AuthenticationService {
 
             SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS512), claimsSet);
             signedJWT.sign(new MACSigner(SIGNER_KEY.getBytes()));
+
+            return signedJWT.serialize();
+        } catch (JOSEException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String generateRefreshToken(Account account, long duration) {
+        try {
+            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                    .subject(account.getUsername())
+                    .issueTime(new Date())
+                    .expirationTime(Date.from(Instant.now().plus(duration, ChronoUnit.SECONDS)))
+                    .build();
+
+            SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS512), claimsSet);
+            signedJWT.sign(new MACSigner(SIGNER_KEY_REFRESH_TOKEN.getBytes()));
 
             return signedJWT.serialize();
         } catch (JOSEException e) {

@@ -22,7 +22,9 @@ public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS = {
             "/auth/**",
             "/swagger-ui/**",
-            "/v3/api-docs/**"
+            "/v3/api-docs/**",
+            "/auth/**",
+            "/accounts/register",
     };
 
     private final String[] AUTHENTICATED_ENDPOINTS = {
@@ -30,6 +32,8 @@ public class SecurityConfig {
             "/permissions/**",
             "/roles/**",
             "/accounts/**",
+            "/friends-user/**",
+            "/verifications/**"
     };
 
     @Bean
@@ -38,9 +42,8 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers(AUTHENTICATED_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.POST, "auth/logout").authenticated()
+                        .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers(AUTHENTICATED_ENDPOINTS).authenticated()
                         .anyRequest().permitAll()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer

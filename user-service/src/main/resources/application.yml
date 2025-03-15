@@ -18,7 +18,7 @@ spring:
   properties:
     hibernate:
       format_sql: true
-      use_sql_comments: true  # Bật chú thích SQL
+      use_sql_comments: true
       highlight_sql: true
       jdbc:
         batch_size: 1
@@ -47,6 +47,7 @@ eureka:
 
 jwt:
   signerKey: "5jNfSN9nejl7bpKNcfO2J3PB6QBrtg22FuG8DUiHzUxxRta8azatGtPdP8rWTapJ"
+  signerKey-refresh-token: "ieuNUR9VajDE2kFJPPflhMNYgSzhlfpc2hv1UmIv00ZtG5yPc6ohNnv/Vyr+mcPJ"
   access-token-valid-duration: 3600000
   refresh-token-valid-duration: 604800000
 
